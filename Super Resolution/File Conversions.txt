@@ -1,6 +1,6 @@
 NIKONtoTHUNDER, NIKONtoIMARIS, and THUNDERtoIMARIS are applications which convert super resolution localization files between formats. NIKON is the standard nSTORM format (csv). THUNDER is for csv input into the ThunderSTORM FIJI Plugin (https://github.com/zitmen/thunderstorm/wiki/Installation). IMARIS makes txt to use with the Imaris XTension CreateSpotsFromFile (http://open.bitplane.com/tabid/235/Default.aspx?id=70). 
 
 
-These are compiled Matlab applications. Require Matlab Runtime 2017a. Install  from the exe and then run the application. They produce output files (csv or text) in the same directory as the input file. 
+These are compiled Matlab applications. Require Matlab Runtime 2017a. Windows only. Install  from the exe and then run the application. They produce output files (csv or text) in the same directory as the input file. 
 
 Written by Sara McArdle of the La Jolla Institute Microscopy Core, 2017. 
