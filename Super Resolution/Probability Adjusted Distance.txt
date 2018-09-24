@@ -1,0 +1,25 @@
+ProbAdjustedDistance.mat is a lookup table to approximate the true distance between two points. 
+
+In single-molecule localization microscopy, for each detected molecule, a centroid position is calculated along with the uncertainty of that measurement. Calculating the distance between molecules must account for the measured uncertainty of both molecules. Adding in this uncertainty to a ground-truth distance to calculate a likely measured centroid-centroid distance is straightforward, but going from a measured distance to the most likely true distance is more complicated. I performed Monte Carlo simulations for various combinations of distance and uncertainty to generate a look-up table that approximates the true distance between molecules from measured parameters. 
+
+For more information, please see:
+Churchman, et al., "A Non-Gaussian Distribution Quantifies Distances Measured with Fluorescence Localization Techniques", 2006 
+Needham, et al., "Measuring EGFR Separations on Cells with ~10 nm Resolution via Fluorophore Localization Imaging withPhotobleaching", 2013
+
+Procedure to generate this table:
+I simulated 100*20*20 conditions: 100 different true distances (0.5 to 50 in 0.5 steps), point A having an uncertainty of 1-20, and point B having an uncertainty of 1-20 (1 nm steps). I put point A at (0,0) + noise derived from a Gaussian standard deviation of uncertainty A. I put point B at (true distance, 0)  + noise derived from a Gaussian standard deviation of its uncertainty. I then measured the distance between them ("observed distance"). I did 100,000 simulations for each set of parameters. 
+
+I then took all of the observed distances, rounded them to the nearest .5 nm, and asked under what true distances do you see the observed distance, given the uncertainty values. So, for instance, if two molecules are 8 nm apart, each with a uncertainty of 2, out of 100,000 simulations, those molecules appeared to be 10nm apart 6,162 times. I then normalized those numbers to the total number of observations in each experimental condition. Out of all of the simulations with any true distance where both points had an uncertainty of 2, there were 101,331 times that the points were observed to be 10 nm apart. So, 6000/100000= ~6% of the time that you observe a 10 nm distance it's actually 8.  
+
+I calculated the distribution of likely true values and the single most likely distance. You can look up 2 uncertainty values and an observed distance and get either the most likely true distance or the range of true distances. This simulation assumes a uniform true distribution of distances. 
+
+With uncertainty values lower than observed distance, the most likely true distance will be smaller than the true distance. At high uncertainty values compared to distance, the average true distance is larger than the observed distance. If 2 points look .5 nm away, but their uncertainty is both 5 nm, they are likely truly 3 nm away (this is because if they switch positions, distance doesn't become negative). 
+
+Open ProbAdjustedDistance.mat in the matlab workspace. The probability distribution can be called as: squeeze(Probability(uncertainty1,uncertainty2,observedDistance*2,:)) 
+The 3rd variable, observed Distance, must be multiplied by 2 because distance was calculated with 0.5 nm steps. The output is the full distribution, in 0.5 nm steps from 0.5 to 20. 
+
+
+The mean true distance is: 
+MeanDist(uncertainty1,uncertainty2,observedDistance*2) .
+This outputs just a single most likely value. 
+ 
