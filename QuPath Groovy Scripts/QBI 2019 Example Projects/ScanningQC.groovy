@@ -34,7 +34,7 @@ runPlugin('qupath.lib.plugins.objects.SmoothFeaturesPlugin', '{"fwhmMicrons": 50
 //Run Classifier
 //Check Path
 def classFolder=buildFilePath(PROJECT_BASE_DIR,'classifiers')
-runClassifier(buildFilePath(classFolder, "Qpclass3.qpclassifier"))
+runClassifier(buildFilePath(classFolder, "ScanningQC.qpclassifier"))
 
 //Summarize results for each detection
 allSuperPixs = getDetectionObjects()
