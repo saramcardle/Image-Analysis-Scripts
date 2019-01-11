@@ -1,0 +1,6 @@
+These are example QuPath scripts that histology core facilities can use QuPath to automate quality control checks, as described by Zbigniew Mikulski at QBI 2019, Rennes, France. 
+
+StainingQC checks for changes in intensity in hematoxylin and eosin stains over time in a standard sample. This helps ensure consistent staining over time, and can show when reagents must be refreshed. 
+ScanningQC checks for poor-quality regions in a scanned slide due to tissue folds, dust, or out-of-focus regions. This is a quick way of  finding "bad" samples that must be re-imaged before analysis. 
+
+The image files are too large to store on Github. Please contact Sara McArdle (smcardle@lji.org) or Zbigniew Mikulski (zmikulski@lji.org) for full project files, including example data. 
