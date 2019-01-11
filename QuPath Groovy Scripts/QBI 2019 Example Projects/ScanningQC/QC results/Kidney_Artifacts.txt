@@ -1,0 +1,3 @@
+Good Area Percent	Whitespace Area Percent	Fold Area Percent	Out Of Focus Area Percent	Dust Area Percent	Total Artifact Area Percent
+59.0675	25.5467	12.0882	3.2976	0	15.3858
+

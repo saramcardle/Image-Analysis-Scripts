@@ -1,0 +1,36 @@
+{
+  "createTimestamp": 1547192941261,
+  "modifyTimestamp": 1547192941261,
+  "pathClasses": [
+    {
+      "name": "Unclassified",
+      "color": -12566464
+    },
+    {
+      "name": "Good",
+      "color": -5000269
+    },
+    {
+      "name": "Fold",
+      "color": -16387001
+    },
+    {
+      "name": "Out Of Focus",
+      "color": -8342656
+    },
+    {
+      "name": "Whitespace",
+      "color": -1
+    },
+    {
+      "name": "Dust",
+      "color": -16777216
+    }
+  ],
+  "images": [
+    {
+      "path": "{$PROJECT_DIR}\\Kidney_Artifacts.czi",
+      "name": "Kidney_Artifacts"
+    }
+  ]
+}

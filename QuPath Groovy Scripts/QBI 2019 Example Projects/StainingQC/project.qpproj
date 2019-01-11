@@ -1,0 +1,40 @@
+{
+  "createTimestamp": 1547192444583,
+  "modifyTimestamp": 1547192444583,
+  "pathClasses": [
+    {
+      "name": "Unclassified",
+      "color": -12566464
+    },
+    {
+      "name": "Tumor",
+      "color": -3670016
+    },
+    {
+      "name": "Stroma",
+      "color": -6895466
+    },
+    {
+      "name": "Immune cells",
+      "color": -6268256
+    },
+    {
+      "name": "Necrosis",
+      "color": -13487566
+    },
+    {
+      "name": "Other",
+      "color": -14336
+    },
+    {
+      "name": "Whitespace",
+      "color": -4934476
+    }
+  ],
+  "images": [
+    {
+      "path": "{$PROJECT_DIR}\\2018-10-12 HE QC-Scene-1-ScanRegion0.czi",
+      "name": "2018-10-12 HE QC-Scene-1-ScanRegion0"
+    }
+  ]
+}
