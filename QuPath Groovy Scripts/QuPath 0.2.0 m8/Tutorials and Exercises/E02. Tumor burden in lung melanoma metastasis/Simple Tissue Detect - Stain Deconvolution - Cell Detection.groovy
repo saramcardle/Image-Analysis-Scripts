@@ -1,0 +1,5 @@
+setImageType('BRIGHTFIELD_H_E');
+setColorDeconvolutionStains('{"Name" : "H&E tumor", "Stain 1" : "Hematoxylin", "Values 1" : "0.62934 0.72397 0.28249 ", "Stain 2" : "Eosin", "Values 2" : "0.31198 0.86314 0.39706 ", "Background" : " 228 227 230 "}');
+runPlugin('qupath.imagej.detect.tissue.SimpleTissueDetection2', '{"threshold": 220,  "requestedPixelSizeMicrons": 20.0,  "minAreaMicrons": 100000.0,  "maxHoleAreaMicrons": 1000000.0,  "darkBackground": false,  "smoothImage": true,  "medianCleanup": true,  "dilateBoundaries": false,  "smoothCoordinates": true,  "excludeOnBoundary": false,  "singleAnnotation": true}');
+selectAnnotations();
+runPlugin('qupath.imagej.detect.cells.WatershedCellDetection', '{"detectionImageBrightfield": "Hematoxylin OD",  "requestedPixelSizeMicrons": 0.5,  "backgroundRadiusMicrons": 0.0,  "medianRadiusMicrons": 0.0,  "sigmaMicrons": 0.5,  "minAreaMicrons": 5.0,  "maxAreaMicrons": 100,  "threshold": 0.2,  "maxBackground": 2.0,  "watershedPostProcess": true,  "cellExpansionMicrons": 3.0,  "includeNuclei": true,  "smoothBoundaries": true,  "makeMeasurements": true}');
