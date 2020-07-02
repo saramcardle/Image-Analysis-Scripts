@@ -1,3 +1,42 @@
-RareCellFinder is  a tool to help find and annotate rare cells in a tissue section for training a machine learning classifier. For detailed help, please see here: https://forum.image.sc/t/rarecellfetcher-a-tool-for-annotating-rare-cells-in-qupath/33654/3
+import qupath.lib.gui.ml.PixelClassifierTools
+import qupath.lib.gui.scripting.QPEx
 
-RepresentativeImageFinder is a script for finding truly "representative" regions of an image with stained cells. It generates annotations around a few small regions with average, high, and low local H-scores. These can be exported to ImageJ, saved as Tiffs, and inserted into a manuscript. Designed to help you avoid bias in selecting regions to show. 
+runPlugin('qupath.imagej.detect.tissue.SimpleTissueDetection2', '{"threshold": 170,  "requestedPixelSizeMicrons": 10.0,  "minAreaMicrons": 100000.0,  "maxHoleAreaMicrons": 1000000.0,  "darkBackground": false,  "smoothImage": true,  "medianCleanup": true,  "dilateBoundaries": false,  "smoothCoordinates": true,  "excludeOnBoundary": true,  "singleAnnotation": true}');
+
+def imageData = getCurrentImageData()
+def cal=imageData.getServer().getPixelCalibration()
+double pixelSize=cal.getAveragedPixelSize()
+
+
+def highClassifier = project.getPixelClassifiers().get('6382 GCGhigh1')
+PixelClassifierTools.createDetectionsFromPixelClassifier(imageData, highClassifier, getAnnotationObjects(), 20, 20, true, false)
+
+print(QPEx.getProjectEntry().getImageName())
+if (QPEx.getProjectEntry().getImageName().contains("_ProINS")){
+        getDetectionObjects().each{
+            it.setPathClass(getPathClass("ProINS"))
+        }
+}
+
+if (QPEx.getProjectEntry().getImageName().contains("_INS")){
+        getDetectionObjects().each{
+            it.setPathClass(getPathClass("Insulin"))
+        }
+}
+
+if (QPEx.getProjectEntry().getImageName().contains("_CD45")){
+        getDetectionObjects().each{
+            it.setPathClass(getPathClass("CD45"))
+        }
+}
+
+if (QPEx.getProjectEntry().getImageName().contains("_IAPP")){
+        getDetectionObjects().each{
+            it.setPathClass(getPathClass("IAPP"))
+        }
+}
+if (QPEx.getProjectEntry().getImageName().contains("_GCG")){
+        getDetectionObjects().each{
+            it.setPathClass(getPathClass("Glucagon"))
+        }
+}
