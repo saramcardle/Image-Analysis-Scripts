@@ -37,11 +37,16 @@ for i=1:length(filelist)
         end
     end
 end
+
+
+minutes=cell2mat(cellfun(@str2num, outMat(2:end,end),'UniformOutput',false))/1000/60;
+minCell=arrayfun(@(x) num2str(x,2), minutes, 'UniformOutput',false);
+outMat(2:end,end+1)=minCell;
 fid2=fopen(outfile,'w');
-header={'Username','File Name','Acquisition Date','Acquisition Time','Duration (ms)'};
-fprintf(fid2,'%s,%s,%s,%s,%s\n',header{:});
+header={'Username','File Name','Acquisition Date','Acquisition Time','Duration (ms)','Duration (min)'};
+fprintf(fid2,'%s,%s,%s,%s,%s,%s\n',header{:});
 for j=2:size(outMat,1)
-    fprintf(fid2,'%s,%s,%s,%s,%s\n',outMat{j,:});
+    fprintf(fid2,'%s,%s,%s,%s,%s,%s\n',outMat{j,:});
 end
 fclose(fid2);
 
