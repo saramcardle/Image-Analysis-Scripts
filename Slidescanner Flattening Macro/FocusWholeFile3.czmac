@@ -1,0 +1,404 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script Version="1.0">
+  <Language>Python</Language>
+  <Text>#Set of functions to flatten a whole slide scan with Z steps into a single in-focus/flattened image
+#Works best with large slides (many tiles) with Z steps taken at Nyquist sampling
+#Divides each tile into 16 (4x4) and chooses the best focal position in each square
+#Recreates whole slide image from these pieces and uses Zeiss functions to repeat stitching 
+#Can batch multiple files from the same folder with the same channels
+#Currently fluorescent only
+#Inspired by the ImageJ plug-in Find_Focus written by Qingzong Tseng, https://sites.google.com/site/qingzongtseng/find-focus
+#Requires 4 other files: TileFocusing.czmsf, TileFocusingSeq.czimp, FocusBlockMath4.py, ChooseFilesToFlatten.py
+
+#Written by Sara McArdle of the La Jolla Institute Microscopy Core, 2018
+
+import time, pickle
+import ast
+from System.Diagnostics import Process
+from System.IO import Path, File, Directory, FileInfo
+import os
+import gc
+
+def FocusSingleChannel(img):
+    #Processes a single channel of a single scene
+    #generates an image of in focus / flattened single slice of img with multiple Z steps
+    #img is a single channel, multiple 
+    
+    #get relevant metadata
+    numTiles=img.Bounds.SizeM   
+    numZ=img.Bounds.SizeZ
+    img.Graphics.Clear()
+    meta=ZenImageMetadata(img) 
+    pixelType=meta.PixelType
+    
+    #load measurement features
+    #these measure the intensity and standard deviation in each slice of each rectangle region (defined below). Also outputs Z position in microns.
+    Zen.Measurement.FeatureSets.ActiveFeatureSet.Load("D:\\Users\\zeiss\\Documents\\FlatteningMacro\\TileFocusing.czmsf")
+    Zen.Measurement.MeasurementSequenceSettings.ActiveMeasurementSequenceSetting.Load("D:\\Users\\zeiss\\Documents\\FlatteningMacro\\TileFocusingSeq.czimp")
+    
+    #Initialize variables used in Focusing Loop
+    posX=[] #list of stage positions of each tile (x)
+    posY=[] #list of stage positions of each tile (y)
+    focusblockTiles=[] #most in focus position of each block of each tile
+    varsblockTiles=[] #variance metric for each slice of each block of each tile
+    zposTiles=[] #stage positions of each tile
+
+    for tile in range(numTiles):
+        #processing for each tile. 
+        #Extract tile as it's own image (changes origin to (0,0)
+        print('focusing' + str(tile)+' / '+str(numTiles))
+        tileimg=img.CreateSubImage('M({})'.format(tile+1))
+        posX.append(tileimg.Metadata.StagePositionMicron.X) #position
+        posY.append(tileimg.Metadata.StagePositionMicron.Y)
+
+        #Sobel filtering reported to increase accuracy of FindFocus math
+        filtered=Zen.Processing.Filter.Edges.Sobel(tileimg, ZenSobelMode.Clip, ZenThirdProcessingDimension.None, False)
+        Zen.Application.Documents.Add(filtered) #needs to be added for graphics to work right
+        
+        #Dividing 2040x2040 image into 16
+        xsteps=[1,511,1021,1531]
+        ysteps=xsteps
+    
+        focusblock=[[0] * 4 for i in range(4)] #4x4 best focus positions of individual tile
+        varsblock=[[[0]*numZ for i in range(4)] for j in range(4)] #4x4xnumZ variance calculation of each block for individual tile
+        
+        #Add 16 rectangle ROIs
+        for xstep, xstart in enumerate(xsteps):
+            for ystep, ystart in enumerate(ysteps):
+                rect= filtered.Graphics.Add(ZenGraphicCategory.Rectangle)
+                rect.SetBounds(xstart, ystart, 510, 510)
+                rect.IsMeasurementVisible=True
+        
+        #Measure intensity standard deviation of edge-filtered image
+        datatable1 = Zen.Measurement.MeasureToTable(filtered)
+        Zen.Application.Documents.Add(datatable1)
+    
+        #Read data from datatable into python lists
+        zpos=[]
+        for xstep, xstart in enumerate(xsteps):
+            for ystep, ystart in enumerate(ysteps):
+                vars=[]
+                focusheight=[]
+            
+                for zstep in range(numZ):
+                    vars.append(datatable1.GetValue((zstep*16)+(xstep*4)+(ystep),4))
+                    focusheight.append(datatable1.GetValue((zstep*16)+(xstep*4)+(ystep),5))
+                    if (xstep==0) and (ystep==0):
+                        zpos.append(datatable1.GetValue((zstep*16)+(xstep*4)+(ystep),5)) 
+                
+                focusblock[xstep][ystep]=focusheight[vars.index(max(vars))]
+                varsblock[xstep][ystep][:]=vars
+        
+        #accumulate data for all tiles
+        focusblockTiles.append(focusblock)
+        varsblockTiles.append(varsblock)
+        zposTiles.append(zpos)
+        
+        #clear memory of unneeded images
+#        filtered.MakeSpace()
+        filtered.Close()
+#        tileimg.MakeSpace()
+        tileimg.Close()
+        Zen.Application.Documents.Remove(filtered,False)
+        Zen.Application.Documents.Remove(datatable1,False)
+        Zen.Application.Documents.Remove(tileimg,False)
+    
+    #Save data into Pickle File to be loaded by external python which has Numpy
+    TileData=((focusblockTiles),posX,posY,zposTiles,(varsblockTiles))
+    picklefile=open(r'D:\Users\zeiss\Documents\FlatteningMacro\focusvars2.pkl','wb')
+    data=pickle.dump(TileData,picklefile)
+    picklefile.close()
+
+    
+    #Call external python 
+    pythonexe=r'D:\Users\zeiss\Anaconda3\python.exe'
+    script=r'D:\Users\zeiss\Documents\FlatteningMacro\FocusBlockMath4.py'
+
+    app=Process();
+    app.StartInfo.FileName=pythonexe;
+    app.StartInfo.Arguments=script
+    app.StartInfo.UseShellExecute = False;
+    app.StartInfo.RedirectStandardInput = False;
+    app.StartInfo.RedirectStandardOutput = True;
+    app.EnableRaisingEvents=True;
+    app.Start();
+    result=app.StandardOutput.ReadToEnd(); #Focus block math outputs best focal position and x,y stage index
+    app.WaitForExit();
+    app.Close();
+
+
+    #convert string to individual lists
+    resultlist=ast.literal_eval(result)
+    bestfocusTiles=resultlist[0] #best choice for Z position in each block of each tile
+    Xidx=resultlist[1]
+    Yidx=resultlist[2]
+
+    print("Merging Focused Tiles: ")
+    #recreate flattened image
+    for t in range(numTiles):
+        print(t) #just to show it hasn't crashed
+        tileimg=img.CreateSubImage('M({})'.format(t+1)) #extract tile so that origin is at 0,0
+        newTile=tileimg.CreateSubImage('Z(1)') #starting with 1 slice to copy the metadata
+        #newTile.Name='Tile{}'.format(t) #think this can be deleted
+    
+        #Grab the correct position of each block, and merge them into a single image
+        for xstep, xstart in enumerate(xsteps):
+            for ystep, ystart in enumerate(ysteps):
+                blockstr='X(%i-%i)|Y(%i-%i)|Z(%i)' % (xstart,xstart+509,ystart,ystart+509,(bestfocusTiles[t][xstep][ystep]+1))
+                #blockimg=tileimg.CreateSubImage(blockstr,False)
+                pixeldata=tileimg.CopyPixelsToArray(blockstr,pixelType)
+                substring='X(%i-%i)|Y(%i-%i)' % (xstart,xstart+509,ystart,ystart+509)
+                newTile.CopyPixelsFromArray(pixeldata,substring,pixelType)
+        #add the new tile into a larger image
+        #base is compiled, unstitched image
+        if t==0:
+            base=newTile.Clone() #start with M0
+        else:
+            base.AddScene(newTile,Xidx[t],Yidx[t]) #place it at it's X and Y index position
+    #Zen.Application.Documents.Add(base)
+#        tileimg.MakeSpace()
+#        newTile.MakeSpace()
+        tileimg.Close()
+        newTile.Close()
+        Zen.Application.Documents.Remove(tileimg)
+        Zen.Application.Documents.Remove(newTile)
+    base.MakeSpace()
+    
+    return(base)
+
+def FocusSingleScene(img,refidx,outPath):
+    #function to split channels for flattening and the put them back together for stitiching
+    #img = image with 1 scene, &gt;1 z, &gt;=1 C
+    #refidx = which channel should be used as a stitching reference (integer 0-channel num)
+    #outPath = file path for saving the final image
+    numC=img.Bounds.SizeC
+
+    nameList=[]
+    if numC&gt;1: #if there is multiple channels
+        for ch in range(numC):
+            singlechannel=img.CreateSubImage('C({})'.format(ch+1)) #extract each channel
+            singlefocus=FocusSingleChannel(singlechannel) #process it as a single image
+            
+            
+            chPath=outPath[0:-13]+'ch'+str(ch)+'.czi'
+            nameList.append(chPath)
+            
+            Zen.Application.Save(singlefocus, chPath, False)
+            
+            singlechannel.MakeSpace()
+            singlechannel.Close()
+            Zen.Application.Documents.Remove(singlechannel)
+            
+            
+            if ch&lt;numC-1:
+                singlefocus.MakeSpace()
+                singlefocus.Close()
+                Zen.Application.Documents.Remove(singlefocus)
+            gc.collect()
+            
+        chImages=[]
+        for ch in range(numC):
+            #merge the unstitched images back into 1 file
+            if ch&lt;numC-1:
+                chDoc=Zen.Application.LoadImage(nameList[ch],False)
+                chImages.append(chDoc)
+            else:
+                chDoc=singlefocus
+                chImages.append(singlefocus)
+                
+            if ch==0:
+                merged=chDoc
+            else:
+                merged=Zen.Processing.Utilities.AddChannels(merged, chDoc)
+#            singlefocus.MakeSpace()
+#            singlefocus.Close()
+#            Zen.Application.Documents.Remove(singlefocus)
+            
+            merged.MakeSpace()
+        
+        img.MakeSpace()
+        img.Close()
+        Zen.Application.Documents.Remove(img)
+        print('Stitching')
+        #stitching settings
+        processingsetting1 = Zen.Processing.Transformation.Settings.StitchingSetting()
+        processingsetting1.Inplace = False
+        processingsetting1.SetReferenceStitchingPlane(ZenImageDimension.C, int(refidx)) #use refidx as stitching refernece
+        processingsetting1.SetOtherPlanesStitchingMode(ZenImageDimension.C, ZenOtherPlanesStitchingMode.AllByReference)
+        processingsetting1.FuseTiles = True
+        processingsetting1.CorrectShading = False
+        processingsetting1.Parameters.EdgeDetector = False
+        processingsetting1.Parameters.MinimalOverlap = 5
+        processingsetting1.Parameters.MaxShift = 15
+        processingsetting1.Parameters.Comparer = ZenStitchingComparer.Optimized
+        processingsetting1.Parameters.GlobalOptimizer = ZenStitchingGlobalOptimizerMode.Best
+        #perform stitching
+        final = Zen.Processing.Transformation.Geometric.Stitching(merged, None, processingsetting1)
+        #Zen.Application.Documents.Add(final)
+        
+        """
+        #ensure each channel in final is displayed in the same color as the origina
+        chlist=img.DisplaySetting.GetAllChannelIds()
+        for ch in range(numC):
+            color=img.DisplaySetting.GetParameter(img.DisplaySetting.GetAllChannelIds()[ch],'Color')
+            final.DisplaySetting.SetParameter(img.DisplaySetting.GetAllChannelIds()[ch],'Color',color)"""
+            
+        for ch in range(numC):
+            doc=chImages[ch]
+            doc.MakeSpace()
+            doc.Close()
+            Zen.Application.Documents.Remove(doc)
+    
+    else: #if there is only 1 channel, no need for splitting and merging
+        processed=FocusSingleChannel(img)
+        
+        chPath=outPath[0:-13]+'chonly.czi'
+            
+        Zen.Application.Save(processed, chPath, False)
+        
+        
+        img.MakeSpace()
+        img.Close()
+        Zen.Application.Documents.Remove(img)
+        #stitching
+        print('Stitching')
+        processingsetting1 = Zen.Processing.Transformation.Settings.StitchingSetting()
+        processingsetting1.Inplace = False
+        processingsetting1.FuseTiles = True
+        processingsetting1.CorrectShading = False
+        processingsetting1.Parameters.EdgeDetector = False
+        processingsetting1.Parameters.MinimalOverlap = 5
+        processingsetting1.Parameters.MaxShift = 15
+        processingsetting1.Parameters.Comparer = ZenStitchingComparer.Optimized
+        processingsetting1.Parameters.GlobalOptimizer = ZenStitchingGlobalOptimizerMode.Best
+        final = Zen.Processing.Transformation.Geometric.Stitching(processed, None, processingsetting1)
+        """
+        color=img.DisplaySetting.GetParameter(img.DisplaySetting.GetAllChannelIds()[0],'Color')
+        final.DisplaySetting.SetParameter(img.DisplaySetting.GetAllChannelIds()[0],'Color',color)"""
+        processed.MakeSpace()
+        processed.Close()
+
+    Zen.Application.Save(final, outPath, False) #save final image at outPath
+    final.MakeSpace()
+    final.Close()
+    Zen.Application.Documents.Remove(final,False)
+    
+
+        
+        
+def BatchFiles():
+    #Brings up tkinter UI to select multiple files
+    #assumes they are in the same folder with the same channels
+    
+    #call external python which has tkinter
+    pythonexe=r'D:\Users\zeiss\Anaconda3\python.exe'
+    script=r'D:\Users\zeiss\Documents\FlatteningMacro\ChooseFilesToFlatten.py'
+    app=Process();
+    app.StartInfo.FileName=pythonexe;
+    app.StartInfo.Arguments=script
+    app.StartInfo.UseShellExecute = False;
+    app.StartInfo.RedirectStandardInput = False;
+    app.StartInfo.RedirectStandardOutput = True;
+    app.EnableRaisingEvents=True;
+
+    app.Start();
+    filestr=app.StandardOutput.ReadToEnd(); #output is full path to 1 or more files
+
+    app.WaitForExit();
+    app.Close();
+    filelist=ast.literal_eval(filestr) #convert string to list
+    
+    #load first image to get channel data to choose stitching reference
+    #NOTE: I would MUCH prefer to use the channel saved in the metadata that the user chose during acquisition set-up
+    #But the metadata makes NO SENSE
+    #it is APPROXIMATELY at these locations but the exact place seems to be file dependent in a way that I can't handle
+    #img.Core.Metadata.ExperimentStorage.OpenPath('ExperimentBlocks/AcquisitionBlock/HelperSetups/FocusSetup/FocusStrategy/ReferenceChannelId').Value
+    #img.Core.Metadata.ExperimentStorage.OpenPath('ExperimentBlocks/AcquisitionBlock/SubDimensionSetups/RegionsSetup/SubDimensionSetups/TilesSetup/SubDimensionSetups/MultiTrackSetup/Track/Channels/Channel/ChannelSetupId'))
+    
+    doc=Zen.Application.LoadImage(filelist[0],False)  
+    chlist=doc.DisplaySetting.GetAllChannelIds()
+    
+    if len(chlist)&gt;1:
+        #get human-readable fluorophore name for each channel
+        chname=[]
+        for i in range(len(chlist)):
+            chname.append(doc.DisplaySetting.GetParameter(chlist[i],'Name'))
+    
+        #UI window to allow users to select channel for stitching reference
+        wd=ZenWindow()
+        wd.AddDropDown('refidx','Select which Channel to use as Stitching Reference',chname,0)
+        refresult=wd.Show()
+        
+        refch=refresult.GetValue('refidx') #name of reference
+        refidx=chname.index(refch) #number of reference
+    else:
+        refidx=0 
+    
+    #process each file
+    for filename in filelist:
+        if Zen.Application.Documents.GetByFileName(filename.replace("/","\\")): #if it is already loaded, no need to reload (saves time)
+            FlattenScenes(Zen.Application.Documents.GetByFileName(filename.replace("/","\\")),refidx) #process loaded image
+        else: #otherwise, load file and then process it
+            doc=Zen.Application.LoadImage(filename,False)
+            FlattenScenes(doc,refidx)
+        doc.MakeSpace()
+        doc.Close()
+        Zen.Application.Documents.RemoveAll()
+
+def FlattenScenes(img,refidx):
+    #function to split scenes and define path for saving
+    numS=img.Bounds.SizeS
+    numZ=img.Bounds.SizeZ
+    
+    #can only "flatten" images with &gt;1 Z step
+    if numZ&gt;1:
+        if numS==1: #if only 1 scene
+            #define name of new file
+            FullPath=img.FileName
+            pathParts=os.path.split(FullPath)
+            imgTitle=pathParts[1].split('.')
+            newTitle=imgTitle[0]+'_Flattened.czi'
+            outPath=os.path.join(pathParts[0],newTitle)
+            FocusSingleScene(img,refidx,outPath) #perform processing
+            img.MakeSpace()
+            img.Close()
+            Zen.Application.Documents.Remove(img)
+        else: #if multiple scenes
+            #find first part of output name
+            FullPath=img.FileName
+            pathParts=os.path.split(FullPath)
+            imgTitle=pathParts[1].split('.')
+            
+            #split scenes
+            splitImages = Zen.Processing.Utilities.SplitScenesToArray(img)
+            img.MakeSpace()
+            img.Close()
+            Zen.Application.Documents.Remove(img)
+            
+            for imgnum, image in enumerate(splitImages): #for each single scene image
+                #finish defining output name            
+                newTitle=imgTitle[0]+'_S'+str(imgnum)+'_Flattened.czi'
+                outPath=os.path.join(pathParts[0],newTitle)
+                FocusSingleScene(image,refidx,outPath) #perform processing
+                image.MakeSpace()
+                image.Close()
+                Zen.Application.Documents.Remove(image)
+            
+    else:
+        print(img.FileName+' has only 1 z step') #don't process single Z images
+
+#start process and bring up file choice UI
+
+BatchFiles()
+
+</Text>
+  <Author></Author>
+  <Description></Description>
+  <ApplicationName></ApplicationName>
+  <Keywords></Keywords>
+  <Row>246</Row>
+  <Column>17</Column>
+  <WatchVariables>
+    <Watch>TileData</Watch>
+  </WatchVariables>
+</Script>

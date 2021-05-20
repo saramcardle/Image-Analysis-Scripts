@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<InteractiveMeasureProgram>
+  <MeasureTools>
+    <RectangleGraphics Name="RectangleGraphics" IsCustom="false">
+      <SelectedFeature Name="Area" NameLocalized="Area" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="false" DisplayUnit="" />
+      <SelectedFeature Name="IntensityMean" NameLocalized="Intensity Mean Value" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="false" DisplayUnit="" />
+      <SelectedFeature Name="IntensityStd" NameLocalized="Intensity Standard Deviation" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="ImageFocusPosition" NameLocalized="Image Focus Position" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </RectangleGraphics>
+  </MeasureTools>
+</InteractiveMeasureProgram>

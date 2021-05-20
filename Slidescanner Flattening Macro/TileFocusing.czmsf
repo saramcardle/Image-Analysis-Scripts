@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FeatureSelectionDocument>
+  <AvailableGraphicElements>
+    <PolygonGraphics Name="PolygonGraphics" IsCustom="false">
+      <SelectedFeature Name="Area" NameLocalized="Area" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="IntensityMean" NameLocalized="Intensity Mean Value" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </PolygonGraphics>
+    <BezierGraphics Name="BezierGraphics" IsCustom="false">
+      <SelectedFeature Name="Area" NameLocalized="Area" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="IntensityMean" NameLocalized="Intensity Mean Value" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </BezierGraphics>
+    <ActivePolygonGraphics Name="ActivePolygonGraphics" IsCustom="false">
+      <SelectedFeature Name="Area" NameLocalized="Area" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="IntensityMean" NameLocalized="Intensity Mean Value" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </ActivePolygonGraphics>
+    <MultiPolygonGraphics Name="MultiPolygonGraphics" IsCustom="false">
+      <SelectedFeature Name="Area" NameLocalized="Area" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="IntensityMean" NameLocalized="Intensity Mean Value" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="HoleCount" NameLocalized="Number of the region holes" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="false" DisplayUnit="" />
+    </MultiPolygonGraphics>
+    <RectangleGraphics Name="RectangleGraphics" IsCustom="false">
+      <SelectedFeature Name="Area" NameLocalized="Area" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="IntensityMean" NameLocalized="Intensity Mean Value" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="IntensityStd" NameLocalized="Intensity Standard Deviation" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="ImageFocusPosition" NameLocalized="Image Focus Position" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </RectangleGraphics>
+    <TiltRectangleGraphics Name="TiltRectangleGraphics" IsCustom="false">
+      <SelectedFeature Name="Area" NameLocalized="Area" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="IntensityMean" NameLocalized="Intensity Mean Value" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </TiltRectangleGraphics>
+    <CircleGraphics Name="CircleGraphics" IsCustom="false">
+      <SelectedFeature Name="Area" NameLocalized="Area" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="IntensityMean" NameLocalized="Intensity Mean Value" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="Diameter" NameLocalized="Diameter" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </CircleGraphics>
+    <InOutCircleGraphics Name="InOutCircleGraphics" IsCustom="false">
+      <SelectedFeature Name="Area" NameLocalized="Area" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="IntensityMean" NameLocalized="Intensity Mean Value" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="Diameter" NameLocalized="Diameter" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </InOutCircleGraphics>
+    <OutInCircleGraphics Name="OutInCircleGraphics" IsCustom="false">
+      <SelectedFeature Name="Area" NameLocalized="Area" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="IntensityMean" NameLocalized="Intensity Mean Value" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="Diameter" NameLocalized="Diameter" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </OutInCircleGraphics>
+    <PointsCircleGraphics Name="PointsCircleGraphics" IsCustom="false">
+      <SelectedFeature Name="Area" NameLocalized="Area" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="IntensityMean" NameLocalized="Intensity Mean Value" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="Diameter" NameLocalized="Diameter" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </PointsCircleGraphics>
+    <LengthGraphics Name="LengthGraphics" IsCustom="false">
+      <SelectedFeature Name="Distance" NameLocalized="Distance" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </LengthGraphics>
+    <LineGraphics Name="LineGraphics" IsCustom="false">
+      <SelectedFeature Name="Distance" NameLocalized="Distance" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </LineGraphics>
+    <DistanceGraphics Name="DistanceGraphics" IsCustom="false">
+      <SelectedFeature Name="Distance" NameLocalized="Distance" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </DistanceGraphics>
+    <CaliperGraphics Name="CaliperGraphics" IsCustom="false">
+      <SelectedFeature Name="Distance" NameLocalized="Distance" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </CaliperGraphics>
+    <PolylineGraphics Name="PolylineGraphics" IsCustom="false">
+      <SelectedFeature Name="Distance" NameLocalized="Distance" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </PolylineGraphics>
+    <OpenBezierGraphics Name="OpenBezierGraphics" IsCustom="false">
+      <SelectedFeature Name="Distance" NameLocalized="Distance" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </OpenBezierGraphics>
+    <ActivePolylineGraphics Name="ActivePolylineGraphics" IsCustom="false">
+      <SelectedFeature Name="Distance" NameLocalized="Distance" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </ActivePolylineGraphics>
+    <MultiCalipersGraphics Name="MultiCalipersGraphics" IsCustom="false">
+      <SelectedFeature Name="Distances" NameLocalized="Distances" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </MultiCalipersGraphics>
+    <MultiDistanceGraphics Name="MultiDistanceGraphics" IsCustom="false">
+      <SelectedFeature Name="Distances" NameLocalized="Distances" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </MultiDistanceGraphics>
+    <ConnectedAngleGraphics Name="ConnectedAngleGraphics" IsCustom="false">
+      <SelectedFeature Name="Angle" NameLocalized="Angle" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </ConnectedAngleGraphics>
+    <DisconnectedAngleGraphics Name="DisconnectedAngleGraphics" IsCustom="false">
+      <SelectedFeature Name="Angle" NameLocalized="Angle" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </DisconnectedAngleGraphics>
+    <MarkerGraphics Name="MarkerGraphics" IsCustom="false">
+      <SelectedFeature Name="CoordinateX" NameLocalized="Coordinate X" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="CoordinateY" NameLocalized="Coordinate Y" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="PixelValue" NameLocalized="Pixel Value" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="ImageFocusPosition" NameLocalized="Image Focus Position" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+    </MarkerGraphics>
+    <EventsGraphics Name="EventsGraphics" IsCustom="false">
+      <SelectedFeature Name="Number" NameLocalized="Number" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="CoordinatesX" NameLocalized="Coordinates X" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="false" DisplayUnit="" />
+      <SelectedFeature Name="CoordinatesY" NameLocalized="Coordinates Y" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="false" DisplayUnit="" />
+    </EventsGraphics>
+    <PointsRelativeGraphics Name="PointsRelativeGraphics" IsCustom="false">
+      <SelectedFeature Name="Number" NameLocalized="Number" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="true" DisplayUnit="" />
+      <SelectedFeature Name="CoordinatesX" NameLocalized="Coordinates X" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="false" DisplayUnit="" />
+      <SelectedFeature Name="CoordinatesY" NameLocalized="Coordinates Y" IsLocalizedNameChanged="false" ChannelName="" ImageComponent="" IsDisplayEnabled="false" DisplayUnit="" />
+    </PointsRelativeGraphics>
+  </AvailableGraphicElements>
+</FeatureSelectionDocument>
