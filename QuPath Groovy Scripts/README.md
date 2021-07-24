@@ -15,4 +15,8 @@
 	* Alignment_diffPixel- Aligns two images (from repeated scanning of a slide or sequential sections) and transfers objects from one to another. Can be used for either intensity- or area-based alignment, the images can have different pixel sizes, and can transfer annotations or detections. 
 	* AlignmentWithbUnWarpJ - an ImageJ script (not groovy) to do elastic alignment of two images. This one is not fully automated, please see [the forum:] (https://forum.image.sc/t/automatically-align-and-rotate-images/30596/21?u=smcardle) for instructions
 
+
+## QuPath 0.3.0-rc1
+	* RareCellFetcher - Function to help you annotate single, rare cells to improve a classifier. Please see [the forum:] (https://forum.image.sc/t/rarecellfetcher-a-tool-for-annotating-rare-cells-in-qupath/33654)
+
 	
