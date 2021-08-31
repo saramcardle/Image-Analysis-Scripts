@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script Version="1.0">
+  <Language>Python</Language>
+  <Text>#Turns a multiscene image into a single scene
+#written by Sara McArdle, La Jolla Institute, Aug 2021. 
+
+import os
+
+img=Zen.Application.ActiveDocument
+totalWidth=img.Bounds.SizeX
+totalHeight=img.Bounds.SizeY
+
+pixelSize=img.Metadata.ScalingMicron.X
+centerX=img.Metadata.StagePositionMicron.X
+centerY=img.Metadata.StagePositionMicron.Y
+
+pixelType=img.Metadata.PixelType
+
+if pixelType==ZenPixelType.Bgr24:
+    fileNoScenes=ZenImage(totalWidth,totalHeight,ZenPixelType.Bgr24)
+else: 
+    fileNoScenes=ZenImage(totalWidth,totalHeight,pixelType,1,1,img.Bounds.SizeC)
+    
+    
+outputImages1 = Zen.Processing.Utilities.SplitScenesToArray(img)
+for image in outputImages1:
+    sceneWidth=image.Bounds.SizeX
+    sceneHeight=image.Bounds.SizeY
+    sceneX=image.Metadata.StagePositionMicron.X
+    sceneY=image.Metadata.StagePositionMicron.Y
+    
+    left=int(totalWidth/2-(round((centerX-sceneX)/pixelSize)+sceneWidth/2))
+    top=int(totalHeight/2-(round((centerY-sceneY)/pixelSize)+sceneHeight/2))
+    
+    if pixelType==ZenPixelType.Bgr24:
+        newloc='X(%i-%i)|Y(%i-%i)' % (left+1, left+sceneWidth,top+1,top+sceneHeight)
+    else:
+        chs=range(img.Bounds.SizeC)
+        string_chs = [str(ch+1) for ch in chs]
+        chslocs=','.join(string_chs)
+        newloc='X(%i-%i)|Y(%i-%i)|C(%s)' % (left+1, left+sceneWidth,top+1,top+sceneHeight,chslocs)
+    
+    fileNoScenes = Zen.Processing.Utilities.FuseSubset(fileNoScenes, image, newloc, False)
+
+Zen.Application.Documents.Add(fileNoScenes)
+fileNoScenes.SetDisplaySetting(img.DisplaySetting.Clone(),True)
+
+
+
+
+
+
+</Text>
+  <Author></Author>
+  <Description></Description>
+  <ApplicationName></ApplicationName>
+  <Keywords></Keywords>
+  <Row>19</Row>
+  <Column>43</Column>
+</Script>
