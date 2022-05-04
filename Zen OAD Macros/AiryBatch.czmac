@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script Version="1.0">
+  <Language>Python</Language>
+  <Text>import os
+
+window=ZenWindow()
+window.AddFolderBrowser('inputFolder','Please select the location the raw files')
+window.AddTextBlock("""Select the strength for each channel. For excess channels, leave at 0.
+Please TYPE the value- clicking on the slider will lead to an arbitrary decimal point.
+The image metadata will not have the used filter strength. Sorry.""")
+window.AddDoubleRange('ch1','Filter Strength Ch 1',0,0,10)
+window.AddDoubleRange('ch2','Filter Strength Ch 2',0,0,10)
+window.AddDoubleRange('ch3','Filter Strength Ch 3',0,0,10)
+window.AddDoubleRange('ch4','Filter Strength Ch 4',0,0,10)
+window.AddDoubleRange('ch5','Filter Strength Ch 5',0,0,10)
+window.AddDoubleRange('ch6','Filter Strength Ch 6',0,0,10)
+window.AddFolderBrowser('outputFolder','Select where to save the processed files. ')
+
+userinput=window.Show()
+inDir=userinput.GetValue('inputFolder')
+outDir=userinput.GetValue('outputFolder')
+coeffs=[float(userinput.GetValue('ch1')), float(userinput.GetValue('ch2')), float(userinput.GetValue('ch3')), float(userinput.GetValue('ch4')), float(userinput.GetValue('ch5')), float(userinput.GetValue('ch6'))]
+print(coeffs)
+
+
+for file in os.listdir(inDir):
+    if file.EndsWith('.czi'):
+        
+        print(os.path.join(inDir,file))
+        doc=Zen.Application.LoadImage(os.path.join(inDir,file),False)
+        if doc.Bounds.SizeH&gt;1:
+            numC=doc.Bounds.SizeC/2
+        
+            for ch in range(numC):
+                singlechannel=doc.CreateSubImage('C({})'.format(ch+1)) #extract each channel
+        
+                image2 = ZenLSM.Processing.Utilities.Airyscan(singlechannel, True, coeffs[ch], False)
+                Zen.Application.Documents.Add(image2)
+                if  ch==0:
+                    merged=image2.Clone()
+                else:
+                    merged=Zen.Processing.Utilities.AddChannels(merged, image2)
+        
+        
+            outname=file.replace(".czi","_AiryOut.czi")
+            Zen.Application.Save(merged, os.path.join(outDir,outname), False)
+        else:
+            print('Image does not have phases')
+</Text>
+  <Author></Author>
+  <Description></Description>
+  <ApplicationName></ApplicationName>
+  <Keywords></Keywords>
+  <Row>12</Row>
+  <Column>59</Column>
+  <Breakpoints>
+    <Breakpoint>2</Breakpoint>
+  </Breakpoints>
+</Script>
