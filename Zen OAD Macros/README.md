@@ -7,6 +7,10 @@ How to run a Zen OAD Macro:
 5) Drag the macro to the right toolbar window. Then, a little button will appear in one of your toolbars that calls the macro.
 
 
-File Descriptions
+File Descriptions:
+
 -RemoveScenes: 	Takes a multiscene image and copies the data into a single scene. This is designed for Axioscan data, especially when a TMA is inappropriately read as a series of independent samples. Works with birghtfield or fluorescence, but 1 Z, 1 time only!
+
 -SlideScanner Flattening Macro: Whole workflow designed to remove artifacts caused by slides not laying perfectly flat in the slidescanner. Must have a minimum of 3 Z steps.
+
+-AiryBatch: Performs Airyscan processing on a folder of data while allowing you to choose a filter strength for each channel individually. 
