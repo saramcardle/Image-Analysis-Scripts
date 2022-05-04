@@ -13,4 +13,4 @@ File Descriptions:
 
 -SlideScanner Flattening Macro: Whole workflow designed to remove artifacts caused by slides not laying perfectly flat in the slidescanner. Must have a minimum of 3 Z steps.
 
--AiryBatch: Performs Airyscan processing on a folder of data while allowing you to choose a filter strength for each channel individually. 
+-AiryBatch: When doing Airyscan processing in Zen on a batch of files, it forces you to pick one filter strength for all channels. This will allow you to perform Airyscan processing on a folder of raw images with different Wiener filter strength for each channel. All .czi files in the folder will be processed with the same settings.  
