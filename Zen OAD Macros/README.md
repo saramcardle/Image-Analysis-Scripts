@@ -9,8 +9,8 @@ How to run a Zen OAD Macro:
 
 File Descriptions:
 
--RemoveScenes: 	Takes a multiscene image and copies the data into a single scene. This is designed for Axioscan data, especially when a TMA is inappropriately read as a series of independent samples. Works with birghtfield or fluorescence, but 1 Z, 1 time only!
+-RemoveScenes: 	Takes a multiscene image and copies the data into a single scene. This is designed for Axioscan data, especially when a TMA is inappropriately read as a series of independent samples. Works with birghtfield or fluorescence, but 1 Z, 1 time only! See here for images: https://forum.image.sc/t/importin-czi-tma-map-into-qupath/42224/18
 
--SlideScanner Flattening Macro: Whole workflow designed to remove artifacts caused by slides not laying perfectly flat in the slidescanner. Must have a minimum of 3 Z steps.
+-SlideScanner Flattening Macro: Whole workflow designed to remove artifacts caused by slides not laying perfectly flat in the slidescanner. Requires multiple python and Zen setting files (all found in subfolder, with instructions). See here for an example: https://link.springer.com/article/10.1007/s00125-021-05619-9
 
 -AiryBatch: When doing Airyscan processing in Zen on a batch of files, it forces you to pick one filter strength for all channels. This will allow you to perform Airyscan processing on a folder of raw images with different Wiener filter strength for each channel. All .czi files in the folder will be processed with the same settings.  
