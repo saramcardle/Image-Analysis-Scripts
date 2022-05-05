@@ -28,7 +28,7 @@ for file in os.listdir(inDir):
         
         print(os.path.join(inDir,file))
         doc=Zen.Application.LoadImage(os.path.join(inDir,file),False)
-        if doc.Bounds.SizeH&gt;1:
+        if doc.Bounds.SizeH>1:
             numC=doc.Bounds.SizeC/2
         
             for ch in range(numC):
