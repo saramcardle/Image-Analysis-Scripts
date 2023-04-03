@@ -19,4 +19,8 @@
 ## QuPath 0.3.0-rc1
 	* RareCellFetcher - Function to help you annotate single, rare cells to improve a classifier. Please see [the forum:] (https://forum.image.sc/t/rarecellfetcher-a-tool-for-annotating-rare-cells-in-qupath/33654)
 
+
+## QuPath 0.4.x
+	* Pixelwise H-score - Implementation of Ram, et al., 2021, "Pixelwise H-score: A novel digital image analysis-based metric to quantify membrane biomarker expression from immunohistochemistry images" (https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0245638). Decently fast, because no objects are created. 
+
 	
