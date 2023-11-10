@@ -23,4 +23,9 @@
 ## QuPath 0.4.x
 	* Pixelwise H-score - Implementation of Ram, et al., 2021, "Pixelwise H-score: A novel digital image analysis-based metric to quantify membrane biomarker expression from immunohistochemistry images" (https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0245638). Decently fast, because no objects are created. 
 
+
+## QuPath 0.5.0
+	* Compared to Region - an example script showing how to create bespoke measurements to feed into a classifier. Measures the background intensity in a circle around each cell and then calculates the difference (subtraction) and ratio (division) of the cell intensity and background
+	* ChannelNames - Tool for visualizing the channel names on fluorescence images. Updates as you change the visible channels, colors, and names. Written by Pete Bankhead. 
+
 	
