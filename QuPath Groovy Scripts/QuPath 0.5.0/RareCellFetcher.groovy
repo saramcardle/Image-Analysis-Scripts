@@ -9,6 +9,7 @@ Inspired by "fetch" command in Cell Profiler Analyst.
 
 Written by Sara McArdle of the La Jolla Institute and edited by Michael Nelson, 2020.
 Updated for QuPath 0.3.0 July 2021
+Validated with QuPath 0.5.0 and to work with Ignored classes June 2024
  */
 
 
@@ -22,8 +23,13 @@ path = buildFilePath(PROJECT_BASE_DIR, 'TrainingAnnotations', name)
 //function to get a random cell of a desired class (interest) that isn't already annotated
 //chooses a cell, copies it's ROI to an annotation
 def getNextCell(interest, classifications, pastCells){
-    def cells= getQuPath().getImageData().getHierarchy().getCellObjects()
-    def celltypes=cells.findAll{it.getPathClass()==getPathClass(interest)}
+def cells= getQuPath().getImageData().getHierarchy().getCellObjects()
+def celltypes = cells
+    if (interest=="null") {
+        celltypes=cells.findAll{it.getPathClass()==null}
+    } else {
+        celltypes=cells.findAll{it.getPathClass()==getPathClass(interest)}
+        }
     def unassigned=celltypes.findAll{!classifications.contains(it.getParent().getPathClass())}
     print cells
     print celltypes
@@ -35,6 +41,7 @@ def getNextCell(interest, classifications, pastCells){
     tempAnnot = PathObjects.createAnnotationObject(roi)
 print "before"
     getQuPath().getImageData().getHierarchy().selectionModel.setSelectedObject(tempAnnot,false)
+   QuPathGUI.getInstance().getViewer().setCenterPixelLocation(tempAnnot.getROI().getCentroidX(),tempAnnot.getROI().getCentroidY())
     print "after"
     //add the current cell to a list of cells so that the user can backtrack if something was incorrectly skipped or assigned
     pastCells << tempAnnot
@@ -43,8 +50,17 @@ print "before"
 //get existing classes
 def cells= QPEx.getCellObjects()
 if (cells.size()==0) {
-    print("Must have detection objects")
+    print("Must have cell objects (detections with a nucleus and cytoplasm)")
+    return
 }
+
+def trainingannots = getAnnotationObjects().findAll{it.isLocked()==false}
+def annotclassifications = new ArrayList<>(trainingannots.collect {it.getPathClass()} as Set)
+if (annotclassifications.size()<2){
+    print("Must have training annotations assigned to at least 2 classes")
+}
+def annotObs = FXCollections.observableArrayList(annotclassifications.collect{it.toString()})
+
 def classifications = new ArrayList<>(cells.collect {it.getPathClass()} as Set)
 if (classifications.size()<2){
     print("Must have cells assigned to at least 2 classes")
@@ -54,12 +70,8 @@ def classStr=classifications.collect{it.toString()}
 def classObs= FXCollections.observableArrayList(classStr)
 
 //list view for assigning classes (and label)
-ListView<String> classListView = new ListView<String>(classObs)
-if (classStr.size()<6) {
-    classListView.setPrefHeight((classStr.size() * 24) + 4)
-} else {
-    classListView.setPrefHeight((6 * 24) + 4)
-}
+ListView<String> classListView = new ListView<String>(annotObs)
+classListView.setPrefHeight((Math.max(annotObs.size(),6) * 24) + 4)
 Label assignmentLabel = new Label("Assign to which class:")
 
 //drop down for choosing which class to fetch (and label)

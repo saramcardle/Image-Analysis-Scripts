@@ -27,5 +27,7 @@
 ## QuPath 0.5.0
 	* Compared to Region - an example script showing how to create bespoke measurements to feed into a classifier. Measures the background intensity in a circle around each cell and then calculates the difference (subtraction) and ratio (division) of the cell intensity and background
 	* ChannelNames - Tool for visualizing the channel names on fluorescence images. Updates as you change the visible channels, colors, and names. Written by Pete Bankhead. 
+	* RareCellFetcher - Function to help you annotate single, rare cells to improve a classifier. Please see [the forum:] (https://forum.image.sc/t/rarecellfetcher-a-tool-for-annotating-rare-cells-in-qupath/33654) UPDATED to deal with ignored classes!
+
 
 	
