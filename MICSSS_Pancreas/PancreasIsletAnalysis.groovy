@@ -27,11 +27,11 @@ The script will:
  In the Pixel Classifiers folder:
    - Low-res pixel classifiers to find basic islet outlines
    - High-res pixel classifiers to find precise positive regions
-   - Pixel Classifier to detect panceas tissue overall
+   - Pixel Classifier to detect pancreas tissue overall
  In the Object Classifiers folder
    - Trained ML Object classifier to remove false islets.
    - Trained ML Object classifier to remove false cells
-   - Trained ML object classifeir to find CD45+
+   - Trained ML object classifier to find CD45+
  A subfolder called Affine with the pre-calculated affine transforms between images (from MICSSSAlignment.groovy)
 ********/
 org.locationtech.jts.geom.GeometryOverlay.isOverlayNG = true //prevents JTS errors downstream
@@ -101,7 +101,7 @@ imageData.hierarchyChanged()
 project.getImageList().each{ //loops through project
     if(it.getImageName() != baseImageName){
         String imgName = it.getImageName()
-        def imageData = it.readImageData()
+        imageData = it.readImageData()
         def hierarchy = imageData.getHierarchy()
         def otherAnno = hierarchy.getAnnotationObjects()
         hierarchy.getSelectionModel().setSelectedObjects(otherAnno, null)
@@ -254,7 +254,7 @@ new File(affinepath).eachFile{ f->
 
     //measure intensity in each image
     def entry = project.getImageList().find {it.getImageName()+".aff" == f.getName()}
-    def imageData = entry.readImageData()
+    imageData = entry.readImageData()
     def otherHierarchy = imageData.getHierarchy()
 
     imageData.setColorDeconvolutionStains(stains)
@@ -362,7 +362,7 @@ new File(affinepath).eachFile{ f->
 project.getImageList().each {
     if (it.getImageName() != baseImageName) {
         String imgName = it.getImageName()
-        def imageData = it.readImageData()
+        imageData = it.readImageData()
         def hierarchy = imageData.getHierarchy()
         def otherAnno = hierarchy.getAnnotationObjects()
         hierarchy.getSelectionModel().setSelectedObjects(otherAnno, null)
@@ -448,7 +448,7 @@ RegionRequest.createInstance(server, downsample)
 PathImage pathImage = IJTools.convertToImagePlus(server, RegionRequest.createInstance(server, downsample))
 ip = pathImage.getImage().getProcessor()
 //IJTools.quickShowImage('test',ip)
-Calibration cal = pathImage.getImage().getCalibration()
+cal = pathImage.getImage().getCalibration()
 ImagePlane plane = ImagePlane.getPlane(getAnnotationObjects()[0].getROI())
 
 //black image to put nuclei on top of
