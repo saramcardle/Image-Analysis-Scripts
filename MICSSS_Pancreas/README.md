@@ -7,7 +7,7 @@ Brief File Descriptions:
 - Pseudofluor.groovy generates a fluorescence-like image from a series of H-DAB MICSSS images for visualization
 - DataCombinerMICSSSS.m takes the series of .txt files output from QuPath and generates a single combined data file for import into CytoMap (requires Matlab)
 - RipleyTissueBoundary.m performs Ripley H-score analysis of islets, accounting for the pancreas tissue boundary (requires Matlab)
-- MICSSStoFCS.m converts the full data table into a .fcs file for analysis in FlowJo, including renaming the variables in a more consistent way. 
+- MICSSStoFCS.m converts the full data table into a .fcs file for analysis in FlowJo, including renaming the variables in a more consistent way [not yet available]. 
 
 All groovy scripts were a collaboration between Sara McArdle, LJI, and Mike Nelson, UW-Madison. We relied heavily on the QuPath source code (referenced inside each file where relevant). 
 
