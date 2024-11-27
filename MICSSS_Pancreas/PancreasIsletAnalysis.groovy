@@ -14,23 +14,25 @@ The script will:
   8. Distribute the islets, as named annotations, to the other images
  9. Run a pixel classifier to find positive staining in the endocrine channels. Organize everything by name.
  10. Expand the islets to find the "peri islet" region
- 11. In the CD45 channel, use StarDist to detect cells in the expanded region. Run an object classifier to mark CD45+ cells. e.
+ 11. In the CD45 channel, use StarDist to detect cells in the expanded region. Run an object classifier to mark CD45+ cells.
  12. Put the CD45 statistics into the islet annotation for export and into the islet/periislet detection for measurement maps
  13. Gather the positive stains from the other images.
  14. Colocalize stains of interest (currently every doublet) and find union of all.
  15. Write the areas and colocalized areas to the islet annotations for export and detections for measurement maps.
 
  EXPECTATIONS:
+ Project contains 9 images from sequential scans of a pancreas, each stained with a different antibody, using the MICSSS Protocol [https://pubmed.ncbi.nlm.nih.gov/31502167/]
+   - 8 endocrine stains followed by CD45. The CD45 is used as the Base Image throughout the alignment and analysis
+   - Each image is labeled with the same Patient ID num and the antibody name
  In the Pixel Classifiers folder:
-    -Low-res pixel classifiers to find basic islet outlines
-    -High-res pixel classifiers to find precise positive regions
-    -Pixel Classifier to detect panceas tissue overall
+   - Low-res pixel classifiers to find basic islet outlines
+   - High-res pixel classifiers to find precise positive regions
+   - Pixel Classifier to detect panceas tissue overall
  In the Object Classifiers folder
-    -Trained ML Object classifier to remove false islets.
-    -Trained ML Object classifier to remove false cells
-    -Trained ML object classifeir to find CD45+
- A subfolder called Affine with the pre-calculated affine transforms between iamges
-
+   - Trained ML Object classifier to remove false islets.
+   - Trained ML Object classifier to remove false cells
+   - Trained ML object classifeir to find CD45+
+ A subfolder called Affine with the pre-calculated affine transforms between images (from MICSSSAlignment.groovy)
 ********/
 org.locationtech.jts.geom.GeometryOverlay.isOverlayNG = true //prevents JTS errors downstream
 
@@ -881,6 +883,7 @@ print('Completely Finished')
  * smoothPolygonRoi
  ***********************/
 
+//transformObject, transformROI, DistributeObjects, GatherObjects taken from here: https://forum.image.sc/t/interactive-image-alignment/23745/9
 
 PathObject transformObject(PathObject pathObject, AffineTransform transform) {
     //apply an affine matrix to an object
@@ -919,6 +922,7 @@ ROI transformROI(ROI roi, AffineTransform transform) {
 
 def DistributeObjects(boolean deleteExisting, boolean createInverse, pathObjects, File f){
     //take the objects in the current image and move them (with affine transform) to the image with name f
+
     f.withObjectInputStream {
         def matrix = it.readObject()
 
