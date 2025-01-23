@@ -1,0 +1,4 @@
+## Keyence Combiners
+The Keyence BZX800 often saves the channels of fluorescence images as individual RGB images instead of the more common multichannel tiff. These two ImageJ macros combine the file sets into more useful multichannel images. 
+  - KeyenceIndivImgs.ijm works on a folder of acquisitions, where the linked images have the same prefix followed by _CH1, _CH2, etc. It generates a single, combined Tif for each image in that folder. 
+  - KeyenceCytometer.ijm works for the results of using the Keyence in Cytometer mode on a well plate, where it automatically creates a subfolder for each well and further subfolders for each position within the well. The final files are put in the Well folder, labeled with the well position.   
