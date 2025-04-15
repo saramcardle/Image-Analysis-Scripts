@@ -1,0 +1,10 @@
+## Detect cells outside of the tingible body macrophages
+We're going to use InstanSeg to detect all cells other than TB Macs. To ensure that we do not accidentally detect the macrophage nuclei as if it were a new cell, we will exclude the macrophage area from the region in which we detect cells. 
+
+1. Select all macrophage annotations: `Right click on the class name in the Annotations tab > Select objects by classification`
+2. Merge them into a single object: `Right click on the image > Annotations > Edit multiple > Merge selected`
+<img src="Images/MergeAnnots.gif">
+    - It will take longer than shown here! 2~5 min.
+3. Make the inverse object, which is all space other than the macrophage area: `Right click on the object > Annotations > Edit single >: Make inverse`
+    <img src="Images/MakeInverse.PNG">
+4. The new object wil be of the None class and will be selected. Set it to the Ignore* class.
