@@ -1,4 +1,4 @@
-Series of files for analysis of MICSSS pancreas images, in conjunction with [PMID TBD].
+# Series of files for analysis of MICSSS pancreas images, in conjunction with [PMID TBD].
 
 Brief File Descriptions:
 - MICSSSAlignment.groovy is used in a QuPath project to calculate affine transforms of all images in a project against a base image. 
