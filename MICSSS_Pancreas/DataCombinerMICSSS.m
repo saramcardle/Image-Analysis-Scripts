@@ -1,7 +1,7 @@
 %% Converts a series of .txt files with Islet and Tissue measurements into a more usable table form
 % Also includes merging the image analysis data with clinical data
-% It's unlikely anyone will use this exact code, it's just uploaded as an
-% example of how to work with these opaque files
+% It's unlikely anyone will use this exact code (there are more efficient methods!), it's just uploaded as an
+% example of how to work with these opaque files. 
 
 %% clinical info sheet
 opts = spreadsheetImportOptions("NumVariables", 6);

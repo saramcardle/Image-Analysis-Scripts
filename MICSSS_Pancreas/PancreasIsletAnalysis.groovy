@@ -1,6 +1,6 @@
 /*********
-FULL ANALYSIS. To be run in 0.5.0 or better with stardist extension.
- Referred to as the "One Script To Rule Them All" throughout the project.
+FULL ANALYSIS. To be run in 0.5.0 or newer with the stardist extension.
+Referred to as the "One Script To Rule Them All" throughout the project.
 
 Run script from one base image, CD45 currently. DO NOT RUN FOR PROJECT.
 The script will:
@@ -17,7 +17,7 @@ The script will:
  11. In the CD45 channel, use StarDist to detect cells in the expanded region. Run an object classifier to mark CD45+ cells.
  12. Put the CD45 statistics into the islet annotation for export and into the islet/periislet detection for measurement maps
  13. Gather the positive stains from the other images.
- 14. Colocalize stains of interest (currently every doublet) and find union of all.
+ 14. Colocalize stains of interest (currently every doublet), find their unions, and find overall endocrine union.
  15. Write the areas and colocalized areas to the islet annotations for export and detections for measurement maps.
 
  EXPECTATIONS:
