@@ -1,5 +1,5 @@
 
-String prefix = 'cellType_' + getCurrentImageNameWithoutExtension() + '_'
+String prefix = 'fig1_' + getCurrentImageNameWithoutExtension() + '_'
 int downsample = 1
 
 def viewer = getCurrentViewer()

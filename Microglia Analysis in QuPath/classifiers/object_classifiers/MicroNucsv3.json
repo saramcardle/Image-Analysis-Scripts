@@ -1,0 +1,36 @@
+{
+  "object_classifier_type": "SimpleClassifier",
+  "function": {
+    "classifier_fun": "ClassifyByMeasurementFunction",
+    "measurement": "Iba %",
+    "pathClassEquals": {
+      "name": "Stroma",
+      "color": [
+        150,
+        200,
+        150
+      ]
+    },
+    "pathClassAbove": {
+      "name": "Stroma",
+      "color": [
+        150,
+        200,
+        150
+      ]
+    },
+    "threshold": 30.0
+  },
+  "pathClasses": [
+    {
+      "name": "Stroma",
+      "color": [
+        150,
+        200,
+        150
+      ]
+    }
+  ],
+  "filter": "DETECTIONS_ALL",
+  "timestamp": 1691536289685
+}

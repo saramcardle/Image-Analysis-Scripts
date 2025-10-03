@@ -1,0 +1,32 @@
+{
+  "pathClasses": [
+    {
+      "name": "MicrogliaShape",
+      "color": -11698048
+    },
+    {
+      "name": "Region*",
+      "color": -1
+    },
+    {
+      "name": "Soma",
+      "color": -16742401
+    },
+    {
+      "name": "Ignore*",
+      "color": -4934476
+    },
+    {
+      "name": "Microglia",
+      "color": -6730394
+    },
+    {
+      "name": "C1",
+      "color": -16645419
+    },
+    {
+      "name": "MicrogliaShape: Angry",
+      "color": -65536
+    }
+  ]
+}
