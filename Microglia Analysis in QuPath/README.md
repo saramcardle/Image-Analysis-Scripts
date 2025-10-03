@@ -1,17 +1,17 @@
-#Microglia segmentation and analysis
+# Microglia segmentation and analysis
 Associated with 'Unmasking Early Microglial Remodeling in an Alzheimer’s Disease Mouse Model', [PMID TBD]
 
-##Description of images
+## Description of images
 The project has 21 whole slide images of mouse hippocampus. 3 channels- Hoechst, CD68, and Iba1. The images were acquired as Z-stacks on a widefield slidescanner, and then deconvolved, Z-projected, and stitched. The pixel size is 0.1722 um. (Hopefully the raw image files will be placed on Zenodo or a similar database. If/when that happens, it will be linked here.)
 
-##Software Requirements
+## Software Requirements
 1. QuPath (https://qupath.github.io/)
 2. Cellpose and the QuPath Cellpose Extension (https://github.com/BIOP/qupath-extension-cellpose)
    - GPU acceleration is helpful but not essential. You can also replace the Cellpose step with Stardist for a much easier install and similar results. 
 3. Fiji (https://fiji.sc/) with the Simple Neurite Tracer plugin (https://imagej.net/plugins/snt/)
 4. The StatProcessing.m script requires Matlab, but this is not essential to the project and can be easily reproduced in many other languages
 
-##Steps for reproducing the analysis
+## Steps for reproducing the analysis
 1. Start a QuPath project with the processed images
 2. In each image, manually annotate the hippocampus, skipping the granule cell nuclei layer in the dentate gyrus. Assign this to the `Region*` class
 3. Add the classifiers folder into the QuPath project. These classifiers are only applicable to these images and cannot be extrapolated onto other projects. They are here only as a reference.
